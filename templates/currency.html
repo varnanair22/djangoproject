@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<form method="POST">
+  {% csrf_token %}
+  <div class = "login_css">
+
+      <h2 style="color:#000066; text-align:center">Currency Conversion Calculator </h2>
+
+        </br>
+        {%for message in messages%}
+        <h2 style="color:#ff0000"><font size="-1">{{message}}</font>
+         </h2>
+         {% endfor %}
+    </br>
+    </br>
+    <label for="curr1" style= "padding-right:75px"><b>Currency</b></label>
+    <select id="curr1" name="curr1">
+      <option value="AED">AED</option>
+    </select>
+    </br>
+    </br>
+    <label for="curr2"  style= "padding-right:23px"><b>Select Currency</b></label>
+    <select id="curr2" name="curr2">
+      {% for curr in currencies %}
+        {% for curr1 in curr_vals %}
+          {% if curr1.curr2 == curr.curr2 %}
+            <option value={{curr.curr2}} selected="selected">{{curr.curr2}}</option>
+          {% else %}
+              break
+          {% endif %}
+        {% endfor %}
+          <option value={{curr.curr2}}>{{curr.curr2}}</option>
+      {% endfor %}
+     </select>
+  </br>
+  </br>
+    <button type="submit" formaction="get_curr_rate">Get Current Rate</button>
+    <label for="curr_conv" style= "padding-right:45px"><b>Current Rate</b></label>
+    {% for curr in curr_vals %}
+    <input type="number" step="0.01" name="curr_conv" id="curr_conv" value="{{curr.conversion_rate}}"  readonly>
+    {% endfor %}
+
+  </br>
+  </br>
+  </br>
+  <input type="checkbox" id="update_val" name="update_val" value="update_val" onclick="myFunction()">
+  <label for="update_val">Update Rate</label><br>
+</br>
+
+    <div id="up_div" style="display:none">
+    <label for="up_conv" style= "padding-right:36px"><b>Updated Rate</b></label>
+    <input type="number" step="0.01" name="up_conv" id="up_conv">
+    <button type="submit" formaction="curr_update">Update</button>
+    </div>
+ <button type="submit" class="refreshbtn" formaction="currency_conv">Refresh</button>
+    </div>
+
+  <script>
+function myFunction()
+{
+  var checkBox = document.getElementById("update_val");
+  var text = document.getElementById("up_div");
+
+  if (checkBox.checked == true){
+    text.style.display = "block";
+  } else {
+    text.style.display = "none";
+  }
+
+}
+
+function read_func()
+{
+  var text = document.getElementById("curr_conv");
+  text.style.display = "block";
+}
+
+
+  </script>
+
+
+</form>
+
+
+
+
+{% endblock %}
